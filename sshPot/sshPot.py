@@ -1,19 +1,23 @@
 import paramiko
 import socket
 import threading
+import io
+from cryptography.hazmat.primitives.asymmetric import ed25519
+from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption
 
-import logging
-logging.basicConfig(level=logging.DEBUG)
-paramiko.util.log_to_file("paramiko_debug.log")
 
-key_path = "/home/vyrttz/.ssh/id_ed25519"
+privkey = ed25519.Ed25519PrivateKey.generate()
+pubkey = privkey.public_key()
+serializedPrivKey = privkey.private_bytes(Encoding.PEM, PrivateFormat.OpenSSH, NoEncryption())
+print(type(serializedPrivKey))
+print(serializedPrivKey[:50])
 
 class Server(paramiko.ServerInterface):
     def __init__(self, ip):
         self.ip = ip
         self.even = threading.Event
 
-    def auth(self, username, password):
+    def check_auth_password(self, username, password):
         #Grabs credentials
         print(f"[{self.ip}] attempt: {username} : {password}")
         with open("ssh_honeypot.log", "a") as f:
@@ -31,14 +35,13 @@ class Server(paramiko.ServerInterface):
 def connection(sock, addr):
     try:
         trans = paramiko.Transport(sock)
-        key = paramiko.Ed25519Key.from_private_key_file(key_path)
+        key = paramiko.Ed25519Key.from_private_key(io.StringIO(serializedPrivKey.decode('utf-8')))
         trans.add_server_key(key)
 
         server = Server(addr[0])
         trans.start_server(server=server)
     except Exception as e:
         print("bs type shi")
-        printf(f"Error handling {addr}: {e}")
     finally:
         trans.close()
 
