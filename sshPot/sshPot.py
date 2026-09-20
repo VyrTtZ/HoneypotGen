@@ -4,6 +4,7 @@ import threading
 import io
 from cryptography.hazmat.primitives.asymmetric import ed25519
 from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption
+import traceback
 
 
 privkey = ed25519.Ed25519PrivateKey.generate()
@@ -29,8 +30,6 @@ class Server(paramiko.ServerInterface):
             return paramiko.OPEN_SUCCEEDED
         return paramiko.OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED
 
-    def get_allowed_auths(self, username):
-        return "password"
 
 def connection(sock, addr):
     try:
@@ -42,14 +41,16 @@ def connection(sock, addr):
         trans.start_server(server=server)
     except Exception as e:
         print("bs type shi")
+        print(f"Error handling {addr}: {e}")
+        traceback.print_exc()
     finally:
         trans.close()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-sock.bind(("0.0.0.0", 50000))
-sock.listen(5)
-print("Listening on 0.0.0.0:50000")
+sock.bind(('0.0.0.0', 20))
+sock.listen(100)
+print("Listening on 10.**.***.*:20")
 
 while True:
     print("bout to accept")

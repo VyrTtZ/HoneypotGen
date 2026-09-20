@@ -1,11 +1,11 @@
-FROM fedora:latest
+FROM python:3.12-slim
 
-RUN dnf update -y && dnf install -y python3 python3-paramiko
 WORKDIR /app
+
+RUN pip install paramiko
+
 COPY sshPot.py .
+
 EXPOSE 22
-CMD ["python3", "sshPot.py"]
 
-
-
-
+CMD ["python", "sshPot.py"]
