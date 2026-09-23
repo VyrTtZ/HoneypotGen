@@ -29,7 +29,7 @@ class Server(paramiko.ServerInterface):
         if kind == "session": #open only nomral shell, no forwarding
             return paramiko.OPEN_SUCCEEDED
         return paramiko.OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED
-
+    
 
 def connection(sock, addr):
     try:
