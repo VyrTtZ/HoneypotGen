@@ -22,5 +22,5 @@ if [[ "$isPost" -eq 1 ]]; then
 fi
 
 
-printf 'HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: text/html\r\nContent-Length: 366\r\n\r\n'
+printf 'HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Type: text/html\r\nContent-Length: 365\r\n\r\n'
 cat index.html
