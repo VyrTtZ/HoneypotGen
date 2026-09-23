@@ -48,9 +48,9 @@ def connection(sock, addr):
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-sock.bind(('0.0.0.0', 20))
+sock.bind(('0.0.0.0', 22))
 sock.listen(100)
-print("Listening on 10.**.***.*:20")
+print("Listening on 10.**.***.*:22")
 
 while True:
     print("bout to accept")
